@@ -3,7 +3,17 @@ import { Link } from "react-router-dom";
 import { BookOpen, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Ebook } from "@/types/ebook";
-import ebookPlaceholder from "@/assets/ebook-placeholder.jpg";
+import coverRedes from "@/assets/cover-redes.jpg";
+import coverHardware from "@/assets/cover-hardware.jpg";
+import coverSeguranca from "@/assets/cover-seguranca.jpg";
+import coverCloud from "@/assets/cover-cloud.jpg";
+
+const categoryCovers: Record<string, string> = {
+  Redes: coverRedes,
+  Hardware: coverHardware,
+  Segurança: coverSeguranca,
+  Cloud: coverCloud,
+};
 
 interface EbookCardProps {
   ebook: Ebook;
@@ -11,6 +21,8 @@ interface EbookCardProps {
 }
 
 const EbookCard = ({ ebook, index }: EbookCardProps) => {
+  const coverImage = ebook.coverUrl || categoryCovers[ebook.category] || coverRedes;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -21,10 +33,12 @@ const EbookCard = ({ ebook, index }: EbookCardProps) => {
         <div className="group relative rounded-lg overflow-hidden glass shadow-card hover:shadow-glow transition-all duration-500 hover:-translate-y-1">
           <div className="aspect-[3/4] overflow-hidden bg-secondary">
             <img
-              src={ebook.coverUrl || ebookPlaceholder}
+              src={coverImage}
               alt={ebook.title}
+              loading="lazy"
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
             />
+            <div className="absolute inset-0 bg-gradient-to-t from-card via-card/20 to-transparent" />
           </div>
           <div className="p-5">
             <div className="flex items-center gap-2 mb-2">

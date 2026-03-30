@@ -1,5 +1,11 @@
 import { motion } from "framer-motion";
 import { Star, Quote } from "lucide-react";
+import avatarLucas from "@/assets/avatar-lucas.jpg";
+import avatarCamila from "@/assets/avatar-camila.jpg";
+import avatarRafael from "@/assets/avatar-rafael.jpg";
+import avatarAna from "@/assets/avatar-ana.jpg";
+import avatarBruno from "@/assets/avatar-bruno.jpg";
+import avatarFernanda from "@/assets/avatar-fernanda.jpg";
 
 const testimonials = [
   {
@@ -7,42 +13,42 @@ const testimonials = [
     role: "Desenvolvedor Full Stack",
     text: "Os ebooks me ajudaram a entender conceitos que eu lutava há meses. Linguagem clara e direto ao ponto!",
     rating: 5,
-    avatar: "LM",
+    avatar: avatarLucas,
   },
   {
     name: "Camila Rodrigues",
     role: "Estudante de Engenharia",
     text: "Comprei o de redes e o de criptografia. Melhor investimento que fiz nos meus estudos esse ano.",
     rating: 5,
-    avatar: "CR",
+    avatar: avatarCamila,
   },
   {
     name: "Rafael Costa",
     role: "Analista de TI",
     text: "Material de qualidade profissional. Uso como referência no meu dia a dia no trabalho.",
     rating: 5,
-    avatar: "RC",
+    avatar: avatarRafael,
   },
   {
     name: "Ana Paula Silva",
     role: "Product Manager",
     text: "Mesmo sem ser técnica, consegui entender tudo. Recomendo para qualquer pessoa curiosa sobre tech.",
     rating: 4,
-    avatar: "AP",
+    avatar: avatarAna,
   },
   {
     name: "Bruno Oliveira",
     role: "DevOps Engineer",
     text: "O ebook de Cloud Computing é sensacional. Explica AWS, GCP e Azure de forma prática e comparativa.",
     rating: 5,
-    avatar: "BO",
+    avatar: avatarBruno,
   },
   {
     name: "Fernanda Lima",
     role: "Designer UX/UI",
     text: "Adorei a didática! Finalmente entendi como funciona a internet por baixo dos panos.",
     rating: 5,
-    avatar: "FL",
+    avatar: avatarFernanda,
   },
 ];
 
@@ -77,9 +83,12 @@ const Testimonials = () => {
             >
               <Quote className="absolute top-4 right-4 w-8 h-8 text-primary/10" />
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-sm font-bold text-primary">
-                  {t.avatar}
-                </div>
+                <img
+                  src={t.avatar}
+                  alt={t.name}
+                  loading="lazy"
+                  className="w-12 h-12 rounded-full object-cover border-2 border-primary/30"
+                />
                 <div>
                   <p className="font-semibold text-foreground text-sm">{t.name}</p>
                   <p className="text-xs text-muted-foreground">{t.role}</p>
