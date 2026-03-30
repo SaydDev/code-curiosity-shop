@@ -4,6 +4,7 @@ export interface Ebook {
   description: string;
   price: number;
   coverUrl: string;
+  pdfUrl?: string;
   category: string;
   pages?: number;
   createdAt: string;

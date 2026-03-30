@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion } from "framer-motion";
-import { Plus, Trash2, Edit, Save, X, BookOpen } from "lucide-react";
+import { Plus, Trash2, Edit, Save, X, BookOpen, Upload, FileUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -20,12 +20,35 @@ const AdminPanel = () => {
     category: "",
     pages: "",
     coverUrl: "",
+    pdfUrl: "",
   });
+  const [coverPreview, setCoverPreview] = useState<string | null>(null);
+  const [pdfName, setPdfName] = useState<string | null>(null);
+  const coverInputRef = useRef<HTMLInputElement>(null);
+  const pdfInputRef = useRef<HTMLInputElement>(null);
 
   const resetForm = () => {
-    setForm({ title: "", description: "", price: "", category: "", pages: "", coverUrl: "" });
+    setForm({ title: "", description: "", price: "", category: "", pages: "", coverUrl: "", pdfUrl: "" });
+    setCoverPreview(null);
+    setPdfName(null);
     setShowForm(false);
     setEditingId(null);
+  };
+
+  const handleCoverUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const url = URL.createObjectURL(file);
+    setCoverPreview(url);
+    setForm((f) => ({ ...f, coverUrl: url }));
+  };
+
+  const handlePdfUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setPdfName(file.name);
+    const url = URL.createObjectURL(file);
+    setForm((f) => ({ ...f, pdfUrl: url }));
   };
 
   const handleSave = () => {
@@ -35,7 +58,7 @@ const AdminPanel = () => {
       setEbooks((prev) =>
         prev.map((e) =>
           e.id === editingId
-            ? { ...e, title: form.title, description: form.description, price: parseFloat(form.price), category: form.category, pages: form.pages ? parseInt(form.pages) : undefined, coverUrl: form.coverUrl }
+            ? { ...e, title: form.title, description: form.description, price: parseFloat(form.price), category: form.category, pages: form.pages ? parseInt(form.pages) : undefined, coverUrl: form.coverUrl, pdfUrl: form.pdfUrl }
             : e
         )
       );
@@ -48,6 +71,7 @@ const AdminPanel = () => {
         category: form.category,
         pages: form.pages ? parseInt(form.pages) : undefined,
         coverUrl: form.coverUrl,
+        pdfUrl: form.pdfUrl,
         createdAt: new Date().toISOString(),
       };
       setEbooks((prev) => [...prev, newEbook]);
@@ -63,7 +87,10 @@ const AdminPanel = () => {
       category: ebook.category,
       pages: ebook.pages?.toString() || "",
       coverUrl: ebook.coverUrl,
+      pdfUrl: ebook.pdfUrl || "",
     });
+    setCoverPreview(ebook.coverUrl || null);
+    setPdfName(ebook.pdfUrl ? "arquivo.pdf" : null);
     setEditingId(ebook.id);
     setShowForm(true);
   };
@@ -127,10 +154,54 @@ const AdminPanel = () => {
                 onChange={(e) => setForm({ ...form, pages: e.target.value })}
                 className="bg-secondary border-border"
               />
+
+              {/* Cover upload */}
+              <div className="md:col-span-1">
+                <input
+                  ref={coverInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleCoverUpload}
+                  className="hidden"
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => coverInputRef.current?.click()}
+                  className="w-full h-10 justify-start gap-2"
+                >
+                  <Upload className="w-4 h-4 text-primary" />
+                  {coverPreview ? "Capa selecionada ✓" : "Upload da capa"}
+                </Button>
+                {coverPreview && (
+                  <img src={coverPreview} alt="Preview" className="mt-2 h-20 rounded-md object-cover" />
+                )}
+              </div>
+
+              {/* PDF upload */}
+              <div className="md:col-span-1">
+                <input
+                  ref={pdfInputRef}
+                  type="file"
+                  accept=".pdf"
+                  onChange={handlePdfUpload}
+                  className="hidden"
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => pdfInputRef.current?.click()}
+                  className="w-full h-10 justify-start gap-2"
+                >
+                  <FileUp className="w-4 h-4 text-primary" />
+                  {pdfName ? `PDF: ${pdfName}` : "Upload do PDF"}
+                </Button>
+              </div>
+
               <Input
-                placeholder="URL da capa (opcional)"
+                placeholder="Ou cole a URL da capa"
                 value={form.coverUrl}
-                onChange={(e) => setForm({ ...form, coverUrl: e.target.value })}
+                onChange={(e) => { setForm({ ...form, coverUrl: e.target.value }); setCoverPreview(e.target.value); }}
                 className="bg-secondary border-border md:col-span-2"
               />
               <Textarea
