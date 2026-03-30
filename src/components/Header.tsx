@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { BookOpen, Settings } from "lucide-react";
+import { BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const Header = () => {
@@ -14,12 +14,6 @@ const Header = () => {
           <Link to="/">
             <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
               Catálogo
-            </Button>
-          </Link>
-          <Link to="/admin">
-            <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
-              <Settings className="w-4 h-4 mr-1" />
-              Admin
             </Button>
           </Link>
         </nav>
