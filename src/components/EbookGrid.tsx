@@ -16,7 +16,7 @@ const EbookGrid = ({ ebooks }: EbookGridProps) => {
           Nenhum ebook disponível no momento.
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {ebooks.map((ebook, i) => (
             <EbookCard key={ebook.id} ebook={ebook} index={i} />
           ))}
