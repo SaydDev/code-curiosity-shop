@@ -1,24 +1,23 @@
 import { motion } from "framer-motion";
-import techBanner from "@/assets/tech-brands-banner.jpg";
-import { Shield, Cpu, Cloud, Wifi, Brain, Code } from "lucide-react";
+import { Shield, Cpu, Cloud, Wifi, Brain, Code, Server, Database, Lock, Globe } from "lucide-react";
 
 const topics = [
-  { icon: Wifi, label: "Redes & Internet" },
-  { icon: Cpu, label: "Hardware & Processadores" },
-  { icon: Shield, label: "Segurança & Criptografia" },
-  { icon: Cloud, label: "Cloud Computing" },
-  { icon: Brain, label: "Inteligência Artificial" },
-  { icon: Code, label: "Programação & Frameworks" },
+  { icon: Wifi, label: "Redes & Internet", desc: "TCP/IP, DNS e protocolos" },
+  { icon: Cpu, label: "Hardware", desc: "Processadores e arquitetura" },
+  { icon: Shield, label: "Segurança", desc: "Criptografia e proteção" },
+  { icon: Cloud, label: "Cloud", desc: "AWS, Azure e GCP" },
+  { icon: Brain, label: "Inteligência Artificial", desc: "ML, Deep Learning e LLMs" },
+  { icon: Code, label: "Programação", desc: "React, frameworks modernos" },
+  { icon: Server, label: "DevOps", desc: "CI/CD, containers e deploy" },
+  { icon: Database, label: "Banco de Dados", desc: "SQL, NoSQL e modelagem" },
+  { icon: Lock, label: "Privacidade", desc: "LGPD e proteção de dados" },
+  { icon: Globe, label: "Web", desc: "Frontend, backend e APIs" },
 ];
 
 const TechBanner = () => {
   return (
-    <section className="relative py-20 overflow-hidden">
-      <div
-        className="absolute inset-0 bg-cover bg-center opacity-15"
-        style={{ backgroundImage: `url(${techBanner})` }}
-      />
-      <div className="absolute inset-0 bg-gradient-to-r from-background via-background/90 to-background" />
+    <section className="relative py-24 overflow-hidden" id="temas">
+      <div className="absolute inset-0 bg-gradient-to-b from-background via-primary/[0.03] to-background" />
 
       <div className="relative z-10 container">
         <motion.div
@@ -26,7 +25,7 @@ const TechBanner = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-12"
+          className="text-center mb-14"
         >
           <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">
             Temas que <span className="text-gradient">cobrimos</span>
@@ -36,18 +35,21 @@ const TechBanner = () => {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
           {topics.map((topic, i) => (
             <motion.div
               key={topic.label}
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: i * 0.08 }}
-              className="flex flex-col items-center gap-3 p-5 rounded-xl glass hover:shadow-glow transition-all duration-300 hover:-translate-y-1"
+              transition={{ duration: 0.4, delay: i * 0.05 }}
+              className="flex flex-col items-center gap-2 p-6 rounded-xl glass hover:shadow-glow hover:border-primary/30 transition-all duration-300 hover:-translate-y-1 group"
             >
-              <topic.icon className="w-8 h-8 text-primary" />
-              <span className="text-sm font-medium text-foreground text-center">{topic.label}</span>
+              <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                <topic.icon className="w-6 h-6 text-primary" />
+              </div>
+              <span className="text-sm font-semibold text-foreground text-center">{topic.label}</span>
+              <span className="text-xs text-muted-foreground text-center">{topic.desc}</span>
             </motion.div>
           ))}
         </div>
