@@ -88,13 +88,22 @@ const EbookDetail = () => {
                 </div>
               </div>
 
-              <Button className="w-full bg-gradient-primary text-primary-foreground font-semibold text-lg py-6 hover:opacity-90 transition-opacity" onClick={() => setShowPix(true)}>
-                <ShoppingCart className="w-5 h-5 mr-2" />
-                Comprar via Pix
-              </Button>
+              {ebook.paymentUrl ? (
+                <a href={ebook.paymentUrl} target="_blank" rel="noopener noreferrer">
+                  <Button className="w-full bg-gradient-primary text-primary-foreground font-semibold text-lg py-6 hover:opacity-90 transition-opacity">
+                    <ShoppingCart className="w-5 h-5 mr-2" />
+                    Comprar agora
+                  </Button>
+                </a>
+              ) : (
+                <Button className="w-full bg-gradient-primary text-primary-foreground font-semibold text-lg py-6 hover:opacity-90 transition-opacity" onClick={() => setShowPix(true)}>
+                  <ShoppingCart className="w-5 h-5 mr-2" />
+                  Comprar via Pix
+                </Button>
+              )}
             </div>
 
-            {showPix && (
+            {!ebook.paymentUrl && showPix && (
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="glass rounded-lg p-6 text-center">
                 <QrCode className="w-16 h-16 text-primary mx-auto mb-4" />
                 <h3 className="font-display font-semibold text-lg mb-2">Pagamento via Pix</h3>
