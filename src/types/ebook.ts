@@ -24,6 +24,7 @@ export interface Ebook {
   createdAt: string;
   discountPercent?: number;
   discountEndsAt?: string;
+  paymentUrl?: string;
 }
 
 export const SAMPLE_EBOOKS: Ebook[] = [
