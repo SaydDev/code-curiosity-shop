@@ -88,22 +88,27 @@ const EbookDetail = () => {
                 </div>
               </div>
 
-              {ebook.paymentUrl ? (
-                <a href={ebook.paymentUrl} target="_blank" rel="noopener noreferrer">
-                  <Button className="w-full bg-gradient-primary text-primary-foreground font-semibold text-lg py-6 hover:opacity-90 transition-opacity">
-                    <ShoppingCart className="w-5 h-5 mr-2" />
-                    Comprar agora
-                  </Button>
-                </a>
-              ) : (
-                <Button className="w-full bg-gradient-primary text-primary-foreground font-semibold text-lg py-6 hover:opacity-90 transition-opacity" onClick={() => setShowPix(true)}>
-                  <ShoppingCart className="w-5 h-5 mr-2" />
-                  Comprar via Pix
+              <div className="flex flex-col gap-3">
+                {ebook.paymentUrl && (
+                  <a href={ebook.paymentUrl} target="_blank" rel="noopener noreferrer">
+                    <Button className="w-full bg-gradient-primary text-primary-foreground font-semibold text-lg py-6 hover:opacity-90 transition-opacity">
+                      <ShoppingCart className="w-5 h-5 mr-2" />
+                      Comprar com Cartão
+                    </Button>
+                  </a>
+                )}
+                <Button
+                  variant="outline"
+                  className="w-full font-semibold text-lg py-6 border-primary/30 hover:bg-primary/5 transition-colors"
+                  onClick={() => setShowPix(!showPix)}
+                >
+                  <QrCode className="w-5 h-5 mr-2" />
+                  Pagar via Pix
                 </Button>
-              )}
+              </div>
             </div>
 
-            {!ebook.paymentUrl && showPix && (
+            {showPix && (
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="glass rounded-lg p-6 text-center">
                 <QrCode className="w-16 h-16 text-primary mx-auto mb-4" />
                 <h3 className="font-display font-semibold text-lg mb-2">Pagamento via Pix</h3>
