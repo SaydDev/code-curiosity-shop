@@ -97,14 +97,23 @@ const EbookDetail = () => {
                     </Button>
                   </a>
                 )}
-                <Button
-                  variant="outline"
-                  className="w-full font-semibold text-lg py-6 border-primary/30 hover:bg-primary/5 transition-colors"
-                  onClick={() => setShowPix(!showPix)}
-                >
-                  <QrCode className="w-5 h-5 mr-2" />
-                  Pagar via Pix
-                </Button>
+                {ebook.paymentPixUrl ? (
+                  <a href={ebook.paymentPixUrl} target="_blank" rel="noopener noreferrer">
+                    <Button variant="outline" className="w-full font-semibold text-lg py-6 border-primary/30 hover:bg-primary/5 transition-colors">
+                      <QrCode className="w-5 h-5 mr-2" />
+                      Pagar via Pix
+                    </Button>
+                  </a>
+                ) : (
+                  <Button
+                    variant="outline"
+                    className="w-full font-semibold text-lg py-6 border-primary/30 hover:bg-primary/5 transition-colors"
+                    onClick={() => setShowPix(!showPix)}
+                  >
+                    <QrCode className="w-5 h-5 mr-2" />
+                    Pagar via Pix
+                  </Button>
+                )}
               </div>
             </div>
 

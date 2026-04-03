@@ -28,6 +28,7 @@ const AdminPanel = () => {
   const [form, setForm] = useState({
     title: "", description: "", price: "", category: "", pages: "",
     coverUrl: "", pdfUrl: "", discountPercent: "", discountEndsAt: "",
+    paymentUrl: "", paymentPixUrl: "",
   });
   const [coverPreview, setCoverPreview] = useState<string | null>(null);
   const [pdfName, setPdfName] = useState<string | null>(null);
@@ -35,7 +36,7 @@ const AdminPanel = () => {
   const pdfInputRef = useRef<HTMLInputElement>(null);
 
   const resetForm = () => {
-    setForm({ title: "", description: "", price: "", category: "", pages: "", coverUrl: "", pdfUrl: "", discountPercent: "", discountEndsAt: "" });
+    setForm({ title: "", description: "", price: "", category: "", pages: "", coverUrl: "", pdfUrl: "", discountPercent: "", discountEndsAt: "", paymentUrl: "", paymentPixUrl: "" });
     setCoverPreview(null);
     setPdfName(null);
     setShowForm(false);
@@ -88,7 +89,7 @@ const AdminPanel = () => {
       setEbooks((prev) =>
         prev.map((e) =>
           e.id === editingId
-            ? { ...e, ...data, pages: data.pages, coverUrl: data.coverUrl || "", pdfUrl: data.pdfUrl }
+            ? { ...e, ...data, pages: data.pages, coverUrl: data.coverUrl || "", pdfUrl: data.pdfUrl, paymentUrl: sanitizeText(form.paymentUrl), paymentPixUrl: sanitizeText(form.paymentPixUrl) }
             : e
         )
       );
@@ -104,6 +105,8 @@ const AdminPanel = () => {
         pdfUrl: data.pdfUrl,
         discountPercent: data.discountPercent,
         discountEndsAt: data.discountEndsAt,
+        paymentUrl: sanitizeText(form.paymentUrl),
+        paymentPixUrl: sanitizeText(form.paymentPixUrl),
         createdAt: new Date().toISOString(),
       };
       setEbooks((prev) => [...prev, newEbook]);
@@ -122,6 +125,8 @@ const AdminPanel = () => {
       pdfUrl: ebook.pdfUrl || "",
       discountPercent: ebook.discountPercent?.toString() || "",
       discountEndsAt: ebook.discountEndsAt ? ebook.discountEndsAt.slice(0, 16) : "",
+      paymentUrl: ebook.paymentUrl || "",
+      paymentPixUrl: ebook.paymentPixUrl || "",
     });
     setCoverPreview(ebook.coverUrl || null);
     setPdfName(ebook.pdfUrl ? "arquivo.pdf" : null);
@@ -244,6 +249,15 @@ const AdminPanel = () => {
 
               <Input placeholder="Ou cole a URL da capa" value={form.coverUrl} onChange={(e) => { setForm({ ...form, coverUrl: e.target.value }); setCoverPreview(e.target.value); }} className="bg-secondary border-border md:col-span-2" maxLength={2000} />
               <Textarea placeholder="Descrição" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className="bg-secondary border-border md:col-span-2" rows={3} maxLength={2000} />
+
+              <div className="md:col-span-2 border-t border-border/50 pt-4 mt-2">
+                <span className="font-display font-semibold text-sm mb-3 block">Links de pagamento</span>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <Input placeholder="Link de pagamento Cartão (Stripe)" value={form.paymentUrl} onChange={(e) => setForm({ ...form, paymentUrl: e.target.value })} className="bg-secondary border-border" maxLength={2000} />
+                  <Input placeholder="Link de pagamento Pix (Mercado Pago)" value={form.paymentPixUrl} onChange={(e) => setForm({ ...form, paymentPixUrl: e.target.value })} className="bg-secondary border-border" maxLength={2000} />
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">Cole os links gerados no Stripe e/ou Mercado Pago</p>
+              </div>
             </div>
             <div className="flex gap-3 mt-4">
               <Button onClick={handleSave} className="bg-gradient-primary text-primary-foreground font-semibold hover:opacity-90">
