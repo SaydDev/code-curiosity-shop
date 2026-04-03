@@ -84,3 +84,12 @@ export function getDiscountedPrice(ebook: Ebook): number | null {
 export function isDiscountActive(ebook: Ebook): boolean {
   return getDiscountedPrice(ebook) !== null;
 }
+
+export function isSafeUrl(url: string): boolean {
+  try {
+    const parsed = new URL(url);
+    return parsed.protocol === "https:" || parsed.protocol === "http:";
+  } catch {
+    return false;
+  }
+}
