@@ -34,12 +34,12 @@ const EbookCard = ({ ebook, index }: EbookCardProps) => {
     >
       <Link to={`/ebook/${ebook.id}`}>
         <div className="group relative rounded-lg overflow-hidden glass shadow-card hover:shadow-glow transition-all duration-500 hover:-translate-y-1 flex flex-col sm:flex-row">
-          <div className="sm:w-48 md:w-56 shrink-0 overflow-hidden bg-secondary relative">
+          <div className="sm:w-48 md:w-56 shrink-0 overflow-hidden bg-[hsl(var(--card))] relative">
             <img
               src={coverImage}
               alt={ebook.title}
               loading="lazy"
-              className="w-full h-48 sm:h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              className="w-full h-48 sm:h-full object-contain bg-[hsl(var(--card))] transition-transform duration-500 group-hover:scale-105"
             />
             {hasDiscount && (
               <div className="absolute top-2 left-2 bg-destructive text-destructive-foreground text-xs font-bold px-2 py-1 rounded-full flex items-center gap-1">

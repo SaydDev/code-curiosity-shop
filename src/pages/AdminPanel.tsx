@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { motion } from "framer-motion";
-import { Plus, Trash2, Edit, Save, X, BookOpen, Upload, FileUp, Flame } from "lucide-react";
+import { Plus, Trash2, Edit, Save, X, BookOpen, Upload, FileUp, Flame, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -12,7 +12,15 @@ import { SAMPLE_EBOOKS, ebookSchema, isDiscountActive } from "@/types/ebook";
 const sanitizeText = (text: string): string =>
   text.replace(/[<>]/g, "").trim();
 
+const ADMIN_PIN = "2026";
+const SESSION_KEY = "admin_auth";
+
 const AdminPanel = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(() => sessionStorage.getItem(SESSION_KEY) === "1");
+  const [pin, setPin] = useState("");
+  const [pinError, setPinError] = useState(false);
+  const [attempts, setAttempts] = useState(0);
+  const [locked, setLocked] = useState(false);
   const [ebooks, setEbooks] = useState<Ebook[]>(SAMPLE_EBOOKS);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
@@ -126,6 +134,50 @@ const AdminPanel = () => {
     setEbooks((prev) => prev.filter((e) => e.id !== id));
   };
 
+  const handleLogin = () => {
+    if (locked) return;
+    if (pin === ADMIN_PIN) {
+      setIsAuthenticated(true);
+      sessionStorage.setItem(SESSION_KEY, "1");
+      setPinError(false);
+    } else {
+      setPinError(true);
+      const next = attempts + 1;
+      setAttempts(next);
+      if (next >= 5) setLocked(true);
+    }
+  };
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="glass rounded-xl p-8 w-full max-w-sm text-center">
+          <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
+            <Lock className="w-8 h-8 text-primary" />
+          </div>
+          <h1 className="text-2xl font-display font-bold mb-2">Área Restrita</h1>
+          <p className="text-sm text-muted-foreground mb-6">Digite a senha para acessar o painel</p>
+          {pinError && <p className="text-sm text-destructive mb-3">Senha incorreta. {locked ? "Bloqueado por excesso de tentativas." : `Tentativa ${attempts}/5`}</p>}
+          <form onSubmit={(e) => { e.preventDefault(); handleLogin(); }}>
+            <Input
+              type="password"
+              placeholder="Senha"
+              value={pin}
+              onChange={(e) => setPin(e.target.value)}
+              className="bg-secondary border-border mb-4 text-center text-lg tracking-widest"
+              maxLength={20}
+              disabled={locked}
+              autoFocus
+            />
+            <Button type="submit" className="w-full bg-gradient-primary text-primary-foreground font-semibold hover:opacity-90" disabled={locked || !pin}>
+              Entrar
+            </Button>
+          </form>
+        </motion.div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -178,7 +230,8 @@ const AdminPanel = () => {
                   <Upload className="w-4 h-4 text-primary" />
                   {coverPreview ? "Capa selecionada ✓" : "Upload da capa"}
                 </Button>
-                {coverPreview && <img src={coverPreview} alt="Preview" className="mt-2 h-20 rounded-md object-cover" />}
+                <p className="text-xs text-muted-foreground mt-1">Tamanho recomendado: 800×1200px (proporção 2:3)</p>
+                {coverPreview && <img src={coverPreview} alt="Preview" className="mt-2 h-20 rounded-md object-contain bg-[hsl(var(--card))]" />}
               </div>
 
               <div className="md:col-span-1">
