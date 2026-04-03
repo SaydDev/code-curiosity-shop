@@ -178,7 +178,8 @@ const AdminPanel = () => {
                   <Upload className="w-4 h-4 text-primary" />
                   {coverPreview ? "Capa selecionada ✓" : "Upload da capa"}
                 </Button>
-                {coverPreview && <img src={coverPreview} alt="Preview" className="mt-2 h-20 rounded-md object-cover" />}
+                <p className="text-xs text-muted-foreground mt-1">Tamanho recomendado: 800×1200px (proporção 2:3)</p>
+                {coverPreview && <img src={coverPreview} alt="Preview" className="mt-2 h-20 rounded-md object-contain bg-[hsl(var(--card))]" />}
               </div>
 
               <div className="md:col-span-1">

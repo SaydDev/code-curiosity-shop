@@ -50,8 +50,8 @@ const EbookDetail = () => {
 
         <div className="grid md:grid-cols-2 gap-12">
           <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }}>
-            <div className="rounded-lg overflow-hidden shadow-card shadow-glow relative">
-              <img src={coverImage} alt={ebook.title} className="w-full h-auto object-cover" />
+            <div className="rounded-lg overflow-hidden shadow-card shadow-glow relative bg-[hsl(var(--card))]">
+              <img src={coverImage} alt={ebook.title} className="w-full h-auto object-contain bg-[hsl(var(--card))]" />
               {hasDiscount && (
                 <div className="absolute top-4 left-4 bg-destructive text-destructive-foreground font-bold px-3 py-1.5 rounded-full flex items-center gap-1 text-sm">
                   <Flame className="w-4 h-4" />
