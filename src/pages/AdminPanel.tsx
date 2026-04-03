@@ -28,6 +28,7 @@ const AdminPanel = () => {
   const [form, setForm] = useState({
     title: "", description: "", price: "", category: "", pages: "",
     coverUrl: "", pdfUrl: "", discountPercent: "", discountEndsAt: "",
+    paymentUrl: "", paymentPixUrl: "",
   });
   const [coverPreview, setCoverPreview] = useState<string | null>(null);
   const [pdfName, setPdfName] = useState<string | null>(null);
