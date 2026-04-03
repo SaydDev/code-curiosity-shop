@@ -97,7 +97,7 @@ const EbookDetail = () => {
                     </Button>
                   </a>
                 )}
-                {ebook.paymentPixUrl ? (
+                {ebook.paymentPixUrl && isSafeUrl(ebook.paymentPixUrl) ? (
                   <a href={ebook.paymentPixUrl} target="_blank" rel="noopener noreferrer">
                     <Button variant="outline" className="w-full font-semibold text-lg py-6 border-primary/30 hover:bg-primary/5 transition-colors">
                       <QrCode className="w-5 h-5 mr-2" />
