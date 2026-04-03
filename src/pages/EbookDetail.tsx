@@ -4,7 +4,7 @@ import { ArrowLeft, BookOpen, FileText, ShoppingCart, QrCode, Flame } from "luci
 import { Button } from "@/components/ui/button";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { SAMPLE_EBOOKS, getDiscountedPrice, isDiscountActive } from "@/types/ebook";
+import { SAMPLE_EBOOKS, getDiscountedPrice, isDiscountActive, isSafeUrl } from "@/types/ebook";
 import coverRedes from "@/assets/cover-redes.jpg";
 import coverHardware from "@/assets/cover-hardware.jpg";
 import coverSeguranca from "@/assets/cover-seguranca.jpg";
