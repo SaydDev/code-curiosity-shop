@@ -4,7 +4,7 @@ import { ArrowLeft, BookOpen, FileText, ShoppingCart, QrCode, Flame } from "luci
 import { Button } from "@/components/ui/button";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { SAMPLE_EBOOKS, getDiscountedPrice, isDiscountActive } from "@/types/ebook";
+import { SAMPLE_EBOOKS, getDiscountedPrice, isDiscountActive, isSafeUrl } from "@/types/ebook";
 import coverRedes from "@/assets/cover-redes.jpg";
 import coverHardware from "@/assets/cover-hardware.jpg";
 import coverSeguranca from "@/assets/cover-seguranca.jpg";
@@ -89,7 +89,7 @@ const EbookDetail = () => {
               </div>
 
               <div className="flex flex-col gap-3">
-                {ebook.paymentUrl && (
+                {ebook.paymentUrl && isSafeUrl(ebook.paymentUrl) && (
                   <a href={ebook.paymentUrl} target="_blank" rel="noopener noreferrer">
                     <Button className="w-full bg-gradient-primary text-primary-foreground font-semibold text-lg py-6 hover:opacity-90 transition-opacity">
                       <ShoppingCart className="w-5 h-5 mr-2" />
@@ -97,7 +97,7 @@ const EbookDetail = () => {
                     </Button>
                   </a>
                 )}
-                {ebook.paymentPixUrl ? (
+                {ebook.paymentPixUrl && isSafeUrl(ebook.paymentPixUrl) ? (
                   <a href={ebook.paymentPixUrl} target="_blank" rel="noopener noreferrer">
                     <Button variant="outline" className="w-full font-semibold text-lg py-6 border-primary/30 hover:bg-primary/5 transition-colors">
                       <QrCode className="w-5 h-5 mr-2" />
