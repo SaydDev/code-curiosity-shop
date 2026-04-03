@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { motion } from "framer-motion";
-import { Plus, Trash2, Edit, Save, X, BookOpen, Upload, FileUp, Flame } from "lucide-react";
+import { Plus, Trash2, Edit, Save, X, BookOpen, Upload, FileUp, Flame, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -12,7 +12,15 @@ import { SAMPLE_EBOOKS, ebookSchema, isDiscountActive } from "@/types/ebook";
 const sanitizeText = (text: string): string =>
   text.replace(/[<>]/g, "").trim();
 
+const ADMIN_PIN = "2026";
+const SESSION_KEY = "admin_auth";
+
 const AdminPanel = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(() => sessionStorage.getItem(SESSION_KEY) === "1");
+  const [pin, setPin] = useState("");
+  const [pinError, setPinError] = useState(false);
+  const [attempts, setAttempts] = useState(0);
+  const [locked, setLocked] = useState(false);
   const [ebooks, setEbooks] = useState<Ebook[]>(SAMPLE_EBOOKS);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
