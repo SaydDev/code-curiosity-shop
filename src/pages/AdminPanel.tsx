@@ -125,6 +125,8 @@ const AdminPanel = () => {
       pdfUrl: ebook.pdfUrl || "",
       discountPercent: ebook.discountPercent?.toString() || "",
       discountEndsAt: ebook.discountEndsAt ? ebook.discountEndsAt.slice(0, 16) : "",
+      paymentUrl: ebook.paymentUrl || "",
+      paymentPixUrl: ebook.paymentPixUrl || "",
     });
     setCoverPreview(ebook.coverUrl || null);
     setPdfName(ebook.pdfUrl ? "arquivo.pdf" : null);
