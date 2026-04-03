@@ -105,6 +105,8 @@ const AdminPanel = () => {
         pdfUrl: data.pdfUrl,
         discountPercent: data.discountPercent,
         discountEndsAt: data.discountEndsAt,
+        paymentUrl: sanitizeText(form.paymentUrl),
+        paymentPixUrl: sanitizeText(form.paymentPixUrl),
         createdAt: new Date().toISOString(),
       };
       setEbooks((prev) => [...prev, newEbook]);
