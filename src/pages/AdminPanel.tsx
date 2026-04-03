@@ -36,7 +36,7 @@ const AdminPanel = () => {
   const pdfInputRef = useRef<HTMLInputElement>(null);
 
   const resetForm = () => {
-    setForm({ title: "", description: "", price: "", category: "", pages: "", coverUrl: "", pdfUrl: "", discountPercent: "", discountEndsAt: "" });
+    setForm({ title: "", description: "", price: "", category: "", pages: "", coverUrl: "", pdfUrl: "", discountPercent: "", discountEndsAt: "", paymentUrl: "", paymentPixUrl: "" });
     setCoverPreview(null);
     setPdfName(null);
     setShowForm(false);
