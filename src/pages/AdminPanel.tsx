@@ -89,7 +89,7 @@ const AdminPanel = () => {
       setEbooks((prev) =>
         prev.map((e) =>
           e.id === editingId
-            ? { ...e, ...data, pages: data.pages, coverUrl: data.coverUrl || "", pdfUrl: data.pdfUrl }
+            ? { ...e, ...data, pages: data.pages, coverUrl: data.coverUrl || "", pdfUrl: data.pdfUrl, paymentUrl: sanitizeText(form.paymentUrl), paymentPixUrl: sanitizeText(form.paymentPixUrl) }
             : e
         )
       );
