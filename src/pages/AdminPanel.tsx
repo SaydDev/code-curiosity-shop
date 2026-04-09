@@ -64,6 +64,12 @@ const AdminPanel = () => {
     coverUrl: "", pdfUrl: "", discountPercent: "", discountEndsAt: "",
     paymentUrl: "",
   });
+  const [coverPreview, setCoverPreview] = useState<string | null>(null);
+  const [pdfName, setPdfName] = useState<string | null>(null);
+  const coverInputRef = useRef<HTMLInputElement>(null);
+  const pdfInputRef = useRef<HTMLInputElement>(null);
+
+  const resetForm = () => {
     setForm({ title: "", description: "", price: "", category: "", pages: "", coverUrl: "", pdfUrl: "", discountPercent: "", discountEndsAt: "", paymentUrl: "" });
     setCoverPreview(null);
     setPdfName(null);
