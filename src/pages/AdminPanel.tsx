@@ -12,15 +12,49 @@ import { SAMPLE_EBOOKS, ebookSchema, isDiscountActive } from "@/types/ebook";
 const sanitizeText = (text: string): string =>
   text.replace(/[<>]/g, "").trim();
 
-const ADMIN_PIN = "2026";
+// SHA-256 hash of the admin PIN — never store plaintext passwords in source
+const ADMIN_PIN_HASH = "158a323a7ba44870f23d96f1516dd70aa48e9a72db4ebb026b0a89e212a208ab";
 const SESSION_KEY = "admin_auth";
+const LOCKOUT_KEY = "admin_lockout";
+const LOCKOUT_DURATION = 15 * 60 * 1000; // 15 minutes
+
+async function hashPin(pin: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(pin);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+  return Array.from(new Uint8Array(hashBuffer))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+}
+
+function getSessionToken(): string {
+  return btoa(crypto.randomUUID() + ":" + Date.now());
+}
+
+function isLockedOut(): { locked: boolean; remaining: number } {
+  const raw = localStorage.getItem(LOCKOUT_KEY);
+  if (!raw) return { locked: false, remaining: 0 };
+  try {
+    const { until } = JSON.parse(raw);
+    const remaining = until - Date.now();
+    if (remaining > 0) return { locked: true, remaining };
+    localStorage.removeItem(LOCKOUT_KEY);
+    return { locked: false, remaining: 0 };
+  } catch {
+    localStorage.removeItem(LOCKOUT_KEY);
+    return { locked: false, remaining: 0 };
+  }
+}
 
 const AdminPanel = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(() => sessionStorage.getItem(SESSION_KEY) === "1");
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    const token = sessionStorage.getItem(SESSION_KEY);
+    return token !== null && token.length > 10;
+  });
   const [pin, setPin] = useState("");
   const [pinError, setPinError] = useState(false);
   const [attempts, setAttempts] = useState(0);
-  const [locked, setLocked] = useState(false);
+  const [locked, setLocked] = useState(() => isLockedOut().locked);
   const [ebooks, setEbooks] = useState<Ebook[]>(SAMPLE_EBOOKS);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
@@ -139,18 +173,24 @@ const AdminPanel = () => {
     setEbooks((prev) => prev.filter((e) => e.id !== id));
   };
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (locked) return;
-    if (pin === ADMIN_PIN) {
+    const pinHash = await hashPin(pin);
+    if (pinHash === ADMIN_PIN_HASH) {
       setIsAuthenticated(true);
-      sessionStorage.setItem(SESSION_KEY, "1");
+      sessionStorage.setItem(SESSION_KEY, getSessionToken());
       setPinError(false);
+      setAttempts(0);
     } else {
       setPinError(true);
       const next = attempts + 1;
       setAttempts(next);
-      if (next >= 5) setLocked(true);
+      if (next >= 5) {
+        setLocked(true);
+        localStorage.setItem(LOCKOUT_KEY, JSON.stringify({ until: Date.now() + LOCKOUT_DURATION }));
+      }
     }
+    setPin("");
   };
 
   if (!isAuthenticated) {
@@ -162,7 +202,7 @@ const AdminPanel = () => {
           </div>
           <h1 className="text-2xl font-display font-bold mb-2">Área Restrita</h1>
           <p className="text-sm text-muted-foreground mb-6">Digite a senha para acessar o painel</p>
-          {pinError && <p className="text-sm text-destructive mb-3">Senha incorreta. {locked ? "Bloqueado por excesso de tentativas." : `Tentativa ${attempts}/5`}</p>}
+          {pinError && <p className="text-sm text-destructive mb-3">Senha incorreta. {locked ? "Bloqueado por 15 minutos." : `Tentativa ${attempts}/5`}</p>}
           <form onSubmit={(e) => { e.preventDefault(); handleLogin(); }}>
             <Input
               type="password"
