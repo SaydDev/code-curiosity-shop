@@ -202,7 +202,7 @@ const AdminPanel = () => {
           </div>
           <h1 className="text-2xl font-display font-bold mb-2">Área Restrita</h1>
           <p className="text-sm text-muted-foreground mb-6">Digite a senha para acessar o painel</p>
-          {pinError && <p className="text-sm text-destructive mb-3">Senha incorreta. {locked ? "Bloqueado por excesso de tentativas." : `Tentativa ${attempts}/5`}</p>}
+          {pinError && <p className="text-sm text-destructive mb-3">Senha incorreta. {locked ? "Bloqueado por 15 minutos." : `Tentativa ${attempts}/5`}</p>}
           <form onSubmit={(e) => { e.preventDefault(); handleLogin(); }}>
             <Input
               type="password"
