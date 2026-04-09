@@ -1,6 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, BookOpen, FileText, ShoppingCart, QrCode, Flame } from "lucide-react";
+import { ArrowLeft, BookOpen, FileText, ShoppingCart, Flame } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -9,7 +9,7 @@ import coverRedes from "@/assets/cover-redes.jpg";
 import coverHardware from "@/assets/cover-hardware.jpg";
 import coverSeguranca from "@/assets/cover-seguranca.jpg";
 import coverCloud from "@/assets/cover-cloud.jpg";
-import { useState } from "react";
+
 
 const categoryCovers: Record<string, string> = {
   Redes: coverRedes,
@@ -21,7 +21,7 @@ const categoryCovers: Record<string, string> = {
 const EbookDetail = () => {
   const { id } = useParams();
   const ebook = SAMPLE_EBOOKS.find((e) => e.id === id);
-  const [showPix, setShowPix] = useState(false);
+  
 
   if (!ebook) {
     return (
@@ -93,45 +93,11 @@ const EbookDetail = () => {
                   <a href={ebook.paymentUrl} target="_blank" rel="noopener noreferrer">
                     <Button className="w-full bg-gradient-primary text-primary-foreground font-semibold text-lg py-6 hover:opacity-90 transition-opacity">
                       <ShoppingCart className="w-5 h-5 mr-2" />
-                      Comprar com Cartão
+                      Comprar Agora
                     </Button>
                   </a>
-                )}
-                {ebook.paymentPixUrl && isSafeUrl(ebook.paymentPixUrl) ? (
-                  <a href={ebook.paymentPixUrl} target="_blank" rel="noopener noreferrer">
-                    <Button variant="outline" className="w-full font-semibold text-lg py-6 border-primary/30 hover:bg-primary/5 transition-colors">
-                      <QrCode className="w-5 h-5 mr-2" />
-                      Pagar via Pix
-                    </Button>
-                  </a>
-                ) : (
-                  <Button
-                    variant="outline"
-                    className="w-full font-semibold text-lg py-6 border-primary/30 hover:bg-primary/5 transition-colors"
-                    onClick={() => setShowPix(!showPix)}
-                  >
-                    <QrCode className="w-5 h-5 mr-2" />
-                    Pagar via Pix
-                  </Button>
                 )}
               </div>
-            </div>
-
-            {showPix && (
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="glass rounded-lg p-6 text-center">
-                <QrCode className="w-16 h-16 text-primary mx-auto mb-4" />
-                <h3 className="font-display font-semibold text-lg mb-2">Pagamento via Pix</h3>
-                <p className="text-sm text-muted-foreground mb-4">
-                  O QR Code será gerado após a integração com o Mercado Pago.
-                </p>
-                <div className="bg-secondary rounded-lg p-4">
-                  <p className="text-xs text-muted-foreground">Valor a pagar</p>
-                  <p className="text-2xl font-display font-bold text-gradient">
-                    R$ {finalPrice.toFixed(2).replace(".", ",")}
-                  </p>
-                </div>
-              </motion.div>
-            )}
           </motion.div>
         </div>
       </div>

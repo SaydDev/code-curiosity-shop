@@ -25,7 +25,6 @@ export interface Ebook {
   discountPercent?: number;
   discountEndsAt?: string;
   paymentUrl?: string;
-  paymentPixUrl?: string;
 }
 
 export const SAMPLE_EBOOKS: Ebook[] = [
@@ -40,8 +39,7 @@ export const SAMPLE_EBOOKS: Ebook[] = [
     createdAt: new Date().toISOString(),
     discountPercent: 30,
     discountEndsAt: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(),
-    paymentUrl: "https://buy.stripe.com/test_14A28qfoj4iv3ZY2Qf8g000",
-    paymentPixUrl: "",
+    paymentUrl: "",
   },
   {
     id: "2",
