@@ -13,7 +13,7 @@ const sanitizeText = (text: string): string =>
   text.replace(/[<>]/g, "").trim();
 
 // SHA-256 hash of the admin PIN — never store plaintext passwords in source
-const ADMIN_PIN_HASH = "158a323a7ba44870f23d96f1516dd70aa48e9a72db4ebb026b0a89e212a208ab";
+const ADMIN_PIN_HASH = "8a73c07ac018b1d4588e1631d3f276cae6d76c89aec76a1c99f35a84195cc18f";
 const SESSION_KEY = "admin_auth";
 const LOCKOUT_KEY = "admin_lockout";
 const LOCKOUT_DURATION = 15 * 60 * 1000; // 15 minutes
