@@ -12,8 +12,39 @@ import { SAMPLE_EBOOKS, ebookSchema, isDiscountActive } from "@/types/ebook";
 const sanitizeText = (text: string): string =>
   text.replace(/[<>]/g, "").trim();
 
-const ADMIN_PIN = "2026";
+// SHA-256 hash of the admin PIN — never store plaintext passwords in source
+const ADMIN_PIN_HASH = "e0e877587182e4a078833b52d5c1e1e5baf0db12df9d8a2e7e42e22e0e5a6b3a";
 const SESSION_KEY = "admin_auth";
+const LOCKOUT_KEY = "admin_lockout";
+const LOCKOUT_DURATION = 15 * 60 * 1000; // 15 minutes
+
+async function hashPin(pin: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(pin);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+  return Array.from(new Uint8Array(hashBuffer))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+}
+
+function getSessionToken(): string {
+  return btoa(crypto.randomUUID() + ":" + Date.now());
+}
+
+function isLockedOut(): { locked: boolean; remaining: number } {
+  const raw = localStorage.getItem(LOCKOUT_KEY);
+  if (!raw) return { locked: false, remaining: 0 };
+  try {
+    const { until } = JSON.parse(raw);
+    const remaining = until - Date.now();
+    if (remaining > 0) return { locked: true, remaining };
+    localStorage.removeItem(LOCKOUT_KEY);
+    return { locked: false, remaining: 0 };
+  } catch {
+    localStorage.removeItem(LOCKOUT_KEY);
+    return { locked: false, remaining: 0 };
+  }
+}
 
 const AdminPanel = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(() => sessionStorage.getItem(SESSION_KEY) === "1");
