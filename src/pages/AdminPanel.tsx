@@ -47,11 +47,14 @@ function isLockedOut(): { locked: boolean; remaining: number } {
 }
 
 const AdminPanel = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(() => sessionStorage.getItem(SESSION_KEY) === "1");
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    const token = sessionStorage.getItem(SESSION_KEY);
+    return token !== null && token.length > 10;
+  });
   const [pin, setPin] = useState("");
   const [pinError, setPinError] = useState(false);
   const [attempts, setAttempts] = useState(0);
-  const [locked, setLocked] = useState(false);
+  const [locked, setLocked] = useState(() => isLockedOut().locked);
   const [ebooks, setEbooks] = useState<Ebook[]>(SAMPLE_EBOOKS);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
@@ -170,18 +173,24 @@ const AdminPanel = () => {
     setEbooks((prev) => prev.filter((e) => e.id !== id));
   };
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (locked) return;
-    if (pin === ADMIN_PIN) {
+    const pinHash = await hashPin(pin);
+    if (pinHash === ADMIN_PIN_HASH) {
       setIsAuthenticated(true);
-      sessionStorage.setItem(SESSION_KEY, "1");
+      sessionStorage.setItem(SESSION_KEY, getSessionToken());
       setPinError(false);
+      setAttempts(0);
     } else {
       setPinError(true);
       const next = attempts + 1;
       setAttempts(next);
-      if (next >= 5) setLocked(true);
+      if (next >= 5) {
+        setLocked(true);
+        localStorage.setItem(LOCKOUT_KEY, JSON.stringify({ until: Date.now() + LOCKOUT_DURATION }));
+      }
     }
+    setPin("");
   };
 
   if (!isAuthenticated) {
