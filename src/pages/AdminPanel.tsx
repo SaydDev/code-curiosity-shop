@@ -13,10 +13,10 @@ const sanitizeText = (text: string): string =>
   text.replace(/[<>]/g, "").trim();
 
 // SHA-256 hash of the admin PIN — never store plaintext passwords in source
-const ADMIN_PIN_HASH = "8a73c07ac018b1d4588e1631d3f276cae6d76c89aec76a1c99f35a84195cc18f";
+const ADMIN_PIN_HASH = "e09db5ccf2f0681f5b8232226c9ccdbec5b75d1c66ec5202b6ba512c2d3158a7";
 const SESSION_KEY = "admin_auth";
 const LOCKOUT_KEY = "admin_lockout";
-const LOCKOUT_DURATION = 15 * 60 * 1000; // 15 minutes
+const LOCKOUT_DURATION = 24 * 60 * 60 * 1000; // 24 hours
 
 async function hashPin(pin: string): Promise<string> {
   const encoder = new TextEncoder();
@@ -62,7 +62,7 @@ const AdminPanel = () => {
   const [form, setForm] = useState({
     title: "", description: "", price: "", category: "", pages: "",
     coverUrl: "", pdfUrl: "", discountPercent: "", discountEndsAt: "",
-    paymentUrl: "", paymentPixUrl: "",
+    paymentUrl: "",
   });
   const [coverPreview, setCoverPreview] = useState<string | null>(null);
   const [pdfName, setPdfName] = useState<string | null>(null);
@@ -70,7 +70,7 @@ const AdminPanel = () => {
   const pdfInputRef = useRef<HTMLInputElement>(null);
 
   const resetForm = () => {
-    setForm({ title: "", description: "", price: "", category: "", pages: "", coverUrl: "", pdfUrl: "", discountPercent: "", discountEndsAt: "", paymentUrl: "", paymentPixUrl: "" });
+    setForm({ title: "", description: "", price: "", category: "", pages: "", coverUrl: "", pdfUrl: "", discountPercent: "", discountEndsAt: "", paymentUrl: "" });
     setCoverPreview(null);
     setPdfName(null);
     setShowForm(false);
@@ -123,7 +123,7 @@ const AdminPanel = () => {
       setEbooks((prev) =>
         prev.map((e) =>
           e.id === editingId
-            ? { ...e, ...data, pages: data.pages, coverUrl: data.coverUrl || "", pdfUrl: data.pdfUrl, paymentUrl: sanitizeText(form.paymentUrl), paymentPixUrl: sanitizeText(form.paymentPixUrl) }
+            ? { ...e, ...data, pages: data.pages, coverUrl: data.coverUrl || "", pdfUrl: data.pdfUrl, paymentUrl: sanitizeText(form.paymentUrl) }
             : e
         )
       );
@@ -140,7 +140,6 @@ const AdminPanel = () => {
         discountPercent: data.discountPercent,
         discountEndsAt: data.discountEndsAt,
         paymentUrl: sanitizeText(form.paymentUrl),
-        paymentPixUrl: sanitizeText(form.paymentPixUrl),
         createdAt: new Date().toISOString(),
       };
       setEbooks((prev) => [...prev, newEbook]);
@@ -160,7 +159,6 @@ const AdminPanel = () => {
       discountPercent: ebook.discountPercent?.toString() || "",
       discountEndsAt: ebook.discountEndsAt ? ebook.discountEndsAt.slice(0, 16) : "",
       paymentUrl: ebook.paymentUrl || "",
-      paymentPixUrl: ebook.paymentPixUrl || "",
     });
     setCoverPreview(ebook.coverUrl || null);
     setPdfName(ebook.pdfUrl ? "arquivo.pdf" : null);
@@ -202,7 +200,7 @@ const AdminPanel = () => {
           </div>
           <h1 className="text-2xl font-display font-bold mb-2">Área Restrita</h1>
           <p className="text-sm text-muted-foreground mb-6">Digite a senha para acessar o painel</p>
-          {pinError && <p className="text-sm text-destructive mb-3">Senha incorreta. {locked ? "Bloqueado por 15 minutos." : `Tentativa ${attempts}/5`}</p>}
+          {pinError && <p className="text-sm text-destructive mb-3">Senha incorreta. {locked ? "Bloqueado por 24 horas." : `Tentativa ${attempts}/5`}</p>}
           <form onSubmit={(e) => { e.preventDefault(); handleLogin(); }}>
             <Input
               type="password"
@@ -291,12 +289,9 @@ const AdminPanel = () => {
               <Textarea placeholder="Descrição" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className="bg-secondary border-border md:col-span-2" rows={3} maxLength={2000} />
 
               <div className="md:col-span-2 border-t border-border/50 pt-4 mt-2">
-                <span className="font-display font-semibold text-sm mb-3 block">Links de pagamento</span>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <Input placeholder="Link de pagamento Cartão (Stripe)" value={form.paymentUrl} onChange={(e) => setForm({ ...form, paymentUrl: e.target.value })} className="bg-secondary border-border" maxLength={2000} />
-                  <Input placeholder="Link de pagamento Pix (Mercado Pago)" value={form.paymentPixUrl} onChange={(e) => setForm({ ...form, paymentPixUrl: e.target.value })} className="bg-secondary border-border" maxLength={2000} />
-                </div>
-                <p className="text-xs text-muted-foreground mt-1">Cole os links gerados no Stripe e/ou Mercado Pago</p>
+                <span className="font-display font-semibold text-sm mb-3 block">Link de pagamento (Kiwify)</span>
+                <Input placeholder="Link de pagamento Kiwify" value={form.paymentUrl} onChange={(e) => setForm({ ...form, paymentUrl: e.target.value })} className="bg-secondary border-border" maxLength={2000} />
+                <p className="text-xs text-muted-foreground mt-1">Cole o link gerado na Kiwify</p>
               </div>
             </div>
             <div className="flex gap-3 mt-4">
