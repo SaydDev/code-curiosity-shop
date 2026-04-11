@@ -40,9 +40,9 @@ const EbookDetail = () => {
   const finalPrice = discountedPrice ?? ebook.price;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background flex flex-col">
       <Header />
-      <div className="container pt-24 pb-16">
+      <div className="container flex-1 flex flex-col justify-center py-16">
         <Link to="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-8">
           <ArrowLeft className="w-4 h-4" />
           Voltar ao catálogo
