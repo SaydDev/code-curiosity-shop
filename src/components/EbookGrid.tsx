@@ -1,13 +1,21 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import EbookCard from "./EbookCard";
 import type { Ebook } from "@/types/ebook";
-import { BookOpen } from "lucide-react";
+import { BookOpen, ChevronDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface EbookGridProps {
   ebooks: Ebook[];
 }
 
+const ITEMS_PER_PAGE = 4;
+
 const EbookGrid = ({ ebooks }: EbookGridProps) => {
+  const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
+  const visibleEbooks = ebooks.slice(0, visibleCount);
+  const hasMore = visibleCount < ebooks.length;
+
   return (
     <section className="container py-20" id="catalogo">
       <motion.div
@@ -34,11 +42,26 @@ const EbookGrid = ({ ebooks }: EbookGridProps) => {
           Nenhum ebook disponível no momento.
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          {ebooks.map((ebook, i) => (
-            <EbookCard key={ebook.id} ebook={ebook} index={i} />
-          ))}
-        </div>
+        <>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {visibleEbooks.map((ebook, i) => (
+              <EbookCard key={ebook.id} ebook={ebook} index={i} />
+            ))}
+          </div>
+          {hasMore && (
+            <div className="flex justify-center mt-10">
+              <Button
+                variant="outline"
+                size="lg"
+                onClick={() => setVisibleCount((prev) => prev + ITEMS_PER_PAGE)}
+                className="gap-2"
+              >
+                <ChevronDown className="w-4 h-4" />
+                Ver mais ebooks
+              </Button>
+            </div>
+          )}
+        </>
       )}
     </section>
   );
