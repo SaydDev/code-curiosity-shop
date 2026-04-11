@@ -71,6 +71,26 @@ export const SAMPLE_EBOOKS: Ebook[] = [
     pages: 150,
     createdAt: new Date().toISOString(),
   },
+  {
+    id: "5",
+    title: "Linux para Iniciantes",
+    description: "Domine o terminal, entenda permissões, processos e shell scripting. O guia definitivo para começar no Linux.",
+    price: 29.90,
+    coverUrl: "",
+    category: "Redes",
+    pages: 110,
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: "6",
+    title: "Banco de Dados Relacional",
+    description: "SQL, modelagem de dados, normalização e otimização de consultas. Tudo que você precisa para dominar bancos de dados.",
+    price: 27.90,
+    coverUrl: "",
+    category: "Hardware",
+    pages: 130,
+    createdAt: new Date().toISOString(),
+  },
 ];
 
 export function getDiscountedPrice(ebook: Ebook): number | null {
