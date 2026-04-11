@@ -93,13 +93,13 @@ const EbookDetail = () => {
                   <a href={ebook.paymentUrl} target="_blank" rel="noopener noreferrer">
                     <Button className="w-full bg-gradient-primary text-primary-foreground font-semibold text-lg py-6 hover:opacity-90 transition-opacity">
                       <ShoppingCart className="w-5 h-5 mr-2" />
-                      Comprar na Kiwify
+                      Comprar Agora
                     </Button>
                   </a>
                 ) : (
                   <Button disabled className="w-full font-semibold text-lg py-6 opacity-60 cursor-not-allowed">
                     <ShoppingCart className="w-5 h-5 mr-2" />
-                    Em breve na Kiwify
+                    Comprar Agora
                   </Button>
                 )}
               </div>
