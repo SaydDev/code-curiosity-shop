@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import { ArrowLeft, BookOpen, FileText, ShoppingCart, Flame } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 import { SAMPLE_EBOOKS, getDiscountedPrice, isDiscountActive, isSafeUrl } from "@/types/ebook";
 import coverRedes from "@/assets/cover-redes.jpg";
 import coverHardware from "@/assets/cover-hardware.jpg";
@@ -107,7 +106,7 @@ const EbookDetail = () => {
           </motion.div>
         </div>
       </div>
-      <Footer />
+      
     </div>
   );
 };
