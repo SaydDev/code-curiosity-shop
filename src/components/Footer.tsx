@@ -8,7 +8,7 @@ const Footer = () => {
           <div>
             <div className="flex items-center gap-2 mb-3">
               <BookOpen className="w-5 h-5 text-primary" />
-              <span className="font-display font-bold text-gradient text-lg">TIS TechBooks</span>
+              <span className="font-display font-bold text-gradient text-lg">TIS TecBooks</span>
             </div>
             <p className="text-sm text-muted-foreground leading-relaxed">
               Ebooks de tecnologia diretos ao ponto. Aprenda conceitos que importam, escritos por quem entende.
@@ -41,7 +41,7 @@ const Footer = () => {
 
         <div className="border-t border-border/50 pt-6 text-center">
           <p className="text-xs text-muted-foreground">
-            © {new Date().getFullYear()} TIS TechBooks. Todos os direitos reservados.
+            © {new Date().getFullYear()} TIS TecBooks. Todos os direitos reservados.
           </p>
         </div>
       </div>
