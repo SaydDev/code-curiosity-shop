@@ -18,7 +18,7 @@ const Header = () => {
       <div className="container flex items-center justify-between h-16">
         <Link to="/" className="flex items-center gap-2 group">
           <BookOpen className="w-6 h-6 text-primary transition-transform group-hover:scale-110" />
-          <span className="text-lg font-display font-bold text-gradient">TechBooks</span>
+          <span className="text-lg font-display font-bold text-gradient">TIS TechBooks</span>
         </Link>
 
         {/* Desktop nav */}
