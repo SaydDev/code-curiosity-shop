@@ -106,7 +106,7 @@ const EbookDetail = () => {
           </motion.div>
         </div>
       </div>
-      <Footer />
+      
     </div>
   );
 };
