@@ -8,7 +8,7 @@ const Footer = () => {
           <div>
             <div className="flex items-center gap-2 mb-3">
               <BookOpen className="w-5 h-5 text-primary" />
-              <span className="font-display font-bold text-gradient text-lg"><span className="font-display font-bold text-gradient text-lg">TIS TecBooks</span>
+              <span className="font-display font-bold text-gradient text-lg">TIS TecBooks</span>
             </div>
             <p className="text-sm text-muted-foreground leading-relaxed">
               Ebooks de tecnologia diretos ao ponto. Aprenda conceitos que importam, escritos por quem entende.
